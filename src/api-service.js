@@ -11,7 +11,7 @@ export default class ApiService {
   fetchImages() {
     return fetch(
       `${BASE_URL}?key=${KEY_API}&q=${this.searchQuery}
-      &image_type=photo&orientation=horizontal&safesearch=true&per_page=4&page=${this.page}`
+      &image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${this.page}`
     )
       .then(response => response.json())
       .then(data => {
@@ -19,9 +19,12 @@ export default class ApiService {
           galleryContainer.innerHTML = '';
           buttonLoadMore.classList.add('hidden');
           Notiflix.Notify.failure(
-            'Sorry, there are no images matching your search query. Please try again.'
+            "Sorry, there are no images matching your search query. Please try again.'"
           );
         } else {
+          if (this.page === 1) {
+            Notiflix.Notify.info(`Hooray! We found ${data.totalHits} images.`);
+          }
           this.incrementPage();
           return data.hits;
         }
