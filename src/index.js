@@ -17,6 +17,16 @@ function renderGallery(imgs) {
   buttonLoadMore.classList.remove('hidden');
 }
 
+function scrollGallery() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+  return window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+}
+
 function onSearchForm(event) {
   event.preventDefault();
   galleryContainer.innerHTML = '';
@@ -27,9 +37,9 @@ function onSearchForm(event) {
     .fetchImages()
     .then(imgs => {
       renderGallery(imgs);
-      gallery.refresh();
+      gallery.refresh();     
     })
-    .catch(error => onFetchError(error)); 
+    .catch(error => onFetchError(error));
 }
 
 function onButtonLoadMore(event) {
@@ -39,14 +49,16 @@ function onButtonLoadMore(event) {
     .then(imgs => {
       renderGallery(imgs);
       gallery.refresh();
+      scrollGallery();
     })
     .catch(error => onFetchError(error));
 }
 
 function onFetchError(error) {
-  console.error(error);  
-  buttonLoadMore.classList.add('hidden'); 
+  console.error(error);
+  buttonLoadMore.classList.add('hidden');
 }
 
 searchForm.addEventListener('submit', onSearchForm);
 buttonLoadMore.addEventListener('click', onButtonLoadMore);
+galleryContainer.addEventListener("wheel", scrollGallery);
