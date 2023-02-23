@@ -1,6 +1,7 @@
 import './sass/index.css';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import debounce from 'lodash.debounce';
 import ApiService from './api-service';
 import galleryMarkup from './gallery-markup';
 
@@ -17,16 +18,6 @@ function renderGallery(imgs) {
   buttonLoadMore.classList.remove('hidden');
 }
 
-function scrollGallery() {
-  const { height: cardHeight } = document
-    .querySelector('.gallery')
-    .firstElementChild.getBoundingClientRect();
-  return window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
-}
-
 function onSearchForm(event) {
   event.preventDefault();
   galleryContainer.innerHTML = '';
@@ -37,7 +28,7 @@ function onSearchForm(event) {
     .fetchImages()
     .then(imgs => {
       renderGallery(imgs);
-      gallery.refresh();     
+      gallery.refresh();
     })
     .catch(error => onFetchError(error));
 }
@@ -49,7 +40,7 @@ function onButtonLoadMore(event) {
     .then(imgs => {
       renderGallery(imgs);
       gallery.refresh();
-      scrollGallery();
+      scrollGalleryOnClick();
     })
     .catch(error => onFetchError(error));
 }
@@ -59,6 +50,35 @@ function onFetchError(error) {
   buttonLoadMore.classList.add('hidden');
 }
 
+function scrollGalleryOnWheel(event) {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+  let scrollDirection;
+  if (event.deltaY < 0) {
+    scrollDirection = window.scrollBy({
+      top: -cardHeight * 2,
+      behavior: 'smooth',
+    });
+  } else {
+    scrollDirection = window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth',
+    });
+  }
+  return scrollDirection;
+}
+
+function scrollGalleryOnClick() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+  return window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+}
+
 searchForm.addEventListener('submit', onSearchForm);
 buttonLoadMore.addEventListener('click', onButtonLoadMore);
-galleryContainer.addEventListener("wheel", scrollGallery);
+galleryContainer.addEventListener('wheel', debounce(scrollGalleryOnWheel, 200));
