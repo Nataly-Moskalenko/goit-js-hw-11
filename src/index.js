@@ -12,22 +12,29 @@ const buttonLoadMore = document.querySelector('.load-more');
 const imagesApiService = new ApiService();
 const gallery = new SimpleLightbox('.gallery a');
 
-function renderGallery(imgs) {
+function renderGalleryOnsearchForm(imgs) {
+  const markup = galleryMarkup(imgs);
+  galleryContainer.innerHTML = markup;
+  // buttonLoadMore.classList.remove('hidden');
+}
+
+function renderGalleryOnButtonLoadMore(imgs) {
   const markup = galleryMarkup(imgs);
   galleryContainer.insertAdjacentHTML('beforeend', markup);
-  buttonLoadMore.classList.remove('hidden');
+  // buttonLoadMore.classList.remove('hidden');
 }
 
 function onSearchForm(event) {
   event.preventDefault();
-  galleryContainer.innerHTML = '';
+  // galleryContainer.innerHTML = '';
   imagesApiService.searchQuery =
     event.currentTarget.elements.searchQuery.value.trim();
   imagesApiService.resetPage();
   imagesApiService
     .fetchImages()
     .then(imgs => {
-      renderGallery(imgs);
+      renderGalleryOnsearchForm(imgs);
+      buttonLoadMore.classList.remove('hidden');
       gallery.refresh();
     })
     .catch(error => onFetchError(error));
@@ -38,7 +45,8 @@ function onButtonLoadMore(event) {
   imagesApiService
     .fetchImages()
     .then(imgs => {
-      renderGallery(imgs);
+      renderGalleryOnButtonLoadMore(imgs);
+      // buttonLoadMore.classList.remove('hidden');
       gallery.refresh();
       scrollGalleryOnClick();
     })

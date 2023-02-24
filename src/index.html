@@ -9,12 +9,21 @@
   <body>
     <form class="search-form" id="search-form">
       <input
+        class="form-input"
         type="text"
         name="searchQuery"
         autocomplete="off"
         placeholder="Search images..."
       />
-      <button type="submit">Search</button>
+      <button class="button" type="submit">        
+        <img
+          class="button-svg"
+          src="./images/search.svg"
+          alt="Search"
+          width="14"
+          height="14"
+        />
+      </button>
     </form>
 
     <div class="gallery"></div>
