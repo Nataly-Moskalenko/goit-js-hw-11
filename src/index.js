@@ -15,18 +15,15 @@ const gallery = new SimpleLightbox('.gallery a');
 function renderGalleryOnsearchForm(imgs) {
   const markup = galleryMarkup(imgs);
   galleryContainer.innerHTML = markup;
-  // buttonLoadMore.classList.remove('hidden');
 }
 
 function renderGalleryOnButtonLoadMore(imgs) {
   const markup = galleryMarkup(imgs);
   galleryContainer.insertAdjacentHTML('beforeend', markup);
-  // buttonLoadMore.classList.remove('hidden');
 }
 
 function onSearchForm(event) {
   event.preventDefault();
-  // galleryContainer.innerHTML = '';
   imagesApiService.searchQuery =
     event.currentTarget.elements.searchQuery.value.trim();
   imagesApiService.resetPage();
@@ -34,7 +31,6 @@ function onSearchForm(event) {
     .fetchImages()
     .then(imgs => {
       renderGalleryOnsearchForm(imgs);
-      buttonLoadMore.classList.remove('hidden');
       gallery.refresh();
     })
     .catch(error => onFetchError(error));
@@ -46,7 +42,6 @@ function onButtonLoadMore(event) {
     .fetchImages()
     .then(imgs => {
       renderGalleryOnButtonLoadMore(imgs);
-      // buttonLoadMore.classList.remove('hidden');
       gallery.refresh();
       scrollGalleryOnClick();
     })

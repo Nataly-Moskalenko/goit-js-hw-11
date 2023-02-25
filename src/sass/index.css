@@ -53,11 +53,24 @@ img {
 .gallery {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
+  gap: 16px;
   justify-content: center;
   list-style: none;
-  margin: 24px auto;
+  margin: 24px 12px;
 }
+
+/* .gallery {
+  display: grid;
+  max-width: 1140px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-auto-rows: 240px;
+  grid-gap: 12px;
+  justify-content: center;
+  padding: 0;
+  list-style: none;
+  margin-left: auto;
+  margin-right: auto;
+} */
 
 .gallery__item {
   max-width: 360px;

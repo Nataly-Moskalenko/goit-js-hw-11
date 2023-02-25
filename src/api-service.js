@@ -3,35 +3,49 @@ import axios from 'axios';
 
 const KEY_API = '33747694-4a7d646e14d783512846269ff';
 const BASE_URL = 'https://pixabay.com/api/';
+const galleryContainer = document.querySelector('.gallery');
+const buttonLoadMore = document.querySelector('.load-more');
 
 export default class ApiService {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
+    this.perPage = 40;
   }
   async fetchImages() {
     return await axios
       .get(
         `${BASE_URL}?key=${KEY_API}&q=${this.searchQuery}
-      &image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${this.page}`
+      &image_type=photo&orientation=horizontal&safesearch=true&per_page=${this.perPage}&page=${this.page}`
       )
       .then(response => {
         if (response.data.totalHits === 0) {
           Notiflix.Notify.failure(
             "Sorry, there are no images matching your search query. Please try again.'"
           );
-        } else if (
-          response.data.totalHits !== 0 &&
-          response.data.hits.length === 0
-        ) {
-          Notiflix.Notify.info(
-            "We're sorry, but you've reached the end of search results."
-          );
+          galleryContainer.innerHTML = '';
         } else {
-          if (this.page === 1) {
+          if (response.data.totalHits <= this.perPage) {
             Notiflix.Notify.success(
               `Hooray! We found ${response.data.totalHits} images.`
             );
+            buttonLoadMore.classList.add('hidden');
+          } else if (
+            this.page === 1 &&
+            response.data.totalHits > this.perPage
+          ) {
+            Notiflix.Notify.success(
+              `Hooray! We found ${response.data.totalHits} images.`
+            );
+            buttonLoadMore.classList.remove('hidden');
+          } else if (
+            this.page > 1 &&
+            this.page === Math.ceil(response.data.totalHits / this.perPage)
+          ) {
+            Notiflix.Notify.info(
+              "We're sorry, but you've reached the end of search results."
+            );
+            buttonLoadMore.classList.add('hidden');
           }
           this.incrementPage();
           return response.data.hits;
