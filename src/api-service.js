@@ -12,45 +12,39 @@ export default class ApiService {
     this.page = 1;
     this.perPage = 40;
   }
+
   async fetchImages() {
-    return await axios
-      .get(
-        `${BASE_URL}?key=${KEY_API}&q=${this.searchQuery}
+    const response = await axios.get(
+      `${BASE_URL}?key=${KEY_API}&q=${this.searchQuery}
       &image_type=photo&orientation=horizontal&safesearch=true&per_page=${this.perPage}&page=${this.page}`
-      )
-      .then(response => {
-        if (response.data.totalHits === 0) {
-          Notiflix.Notify.failure(
-            "Sorry, there are no images matching your search query. Please try again.'"
-          );
-          galleryContainer.innerHTML = '';
-        } else {
-          if (response.data.totalHits <= this.perPage) {
-            Notiflix.Notify.success(
-              `Hooray! We found ${response.data.totalHits} images.`
-            );
-            buttonLoadMore.classList.add('hidden');
-          } else if (
-            this.page === 1 &&
-            response.data.totalHits > this.perPage
-          ) {
-            Notiflix.Notify.success(
-              `Hooray! We found ${response.data.totalHits} images.`
-            );
-            buttonLoadMore.classList.remove('hidden');
-          } else if (
-            this.page > 1 &&
-            this.page === Math.ceil(response.data.totalHits / this.perPage)
-          ) {
-            Notiflix.Notify.info(
-              "We're sorry, but you've reached the end of search results."
-            );
-            buttonLoadMore.classList.add('hidden');
-          }
-          this.incrementPage();
-          return response.data.hits;
-        }
-      });
+    );
+    const data = await response.data;
+
+    if (data.totalHits === 0) {
+      Notiflix.Notify.failure(
+        "Sorry, there are no images matching your search query. Please try again.'"
+      );
+      galleryContainer.innerHTML = '';
+    } else {
+      if (data.totalHits <= this.perPage) {
+        Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+        buttonLoadMore.classList.add('hidden');
+      } else if (this.page === 1 && data.totalHits > this.perPage) {
+        Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+        buttonLoadMore.classList.remove('hidden');
+      } else if (
+        this.page > 1 &&
+        this.page === Math.ceil(data.totalHits / this.perPage)
+      ) {
+        Notiflix.Notify.info(
+          "We're sorry, but you've reached the end of search results."
+        );
+        buttonLoadMore.classList.add('hidden');
+      }
+
+      this.incrementPage();
+      return data.hits;
+    }
   }
 
   incrementPage() {
