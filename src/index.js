@@ -4,6 +4,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import debounce from 'lodash.debounce';
 import ApiService from './api-service';
 import galleryMarkup from './gallery-markup';
+import notiflixService from './notiflix-service';
 
 const searchForm = document.querySelector('#search-form');
 const galleryContainer = document.querySelector('.gallery');
@@ -12,7 +13,7 @@ const buttonLoadMore = document.querySelector('.load-more');
 const imagesApiService = new ApiService();
 const gallery = new SimpleLightbox('.gallery a');
 
-function renderGalleryOnsearchForm(imgs) {
+function renderGalleryOnSearchForm(imgs) {
   const markup = galleryMarkup(imgs);
   galleryContainer.innerHTML = markup;
 }
@@ -28,8 +29,9 @@ async function onSearchForm(event) {
     event.currentTarget.elements.searchQuery.value.trim();
   imagesApiService.resetPage();
   try {
-    const imgs = await imagesApiService.fetchImages();
-    renderGalleryOnsearchForm(imgs);
+    const { hits, totalHits } = await imagesApiService.fetchImages();
+    renderGalleryOnSearchForm(hits);
+    notiflixService(totalHits);
   } catch (error) {
     onFetchError(error);
   }
@@ -38,9 +40,11 @@ async function onSearchForm(event) {
 
 async function onButtonLoadMore(event) {
   event.preventDefault();
+  page = imagesApiService.page;
   try {
-    const imgs = await imagesApiService.fetchImages();
-    renderGalleryOnButtonLoadMore(imgs);
+    const { hits, totalHits } = await imagesApiService.fetchImages();
+    renderGalleryOnButtonLoadMore(hits);
+    notiflixService(totalHits, page);
   } catch (error) {
     onFetchError(error);
   }
@@ -50,7 +54,6 @@ async function onButtonLoadMore(event) {
 
 function onFetchError(error) {
   console.error(error);
-  buttonLoadMore.classList.add('hidden');
 }
 
 function scrollGalleryOnWheel(event) {
