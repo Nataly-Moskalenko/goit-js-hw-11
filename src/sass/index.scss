@@ -32,7 +32,8 @@ img {
   justify-content: center;
 }
 
-.form-input:focus-visible {
+.form-input:focus-visible,
+.button:focus-visible {
   outline: none;
 }
 
@@ -65,7 +66,7 @@ img {
 }
 
 .gallery__item {
-  max-width: 460px;
+  max-width: 390px;
   position: relative;
   text-decoration: none;
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
