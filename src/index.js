@@ -4,13 +4,14 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import debounce from 'lodash.debounce';
 import ApiService from './api-service';
 import galleryMarkup from './gallery-markup';
-import notiflixService from './notiflix-service';
+import NotificationService from './notification-service';
 
 const searchForm = document.querySelector('#search-form');
 const galleryContainer = document.querySelector('.gallery');
 const buttonLoadMore = document.querySelector('.load-more');
 
 const imagesApiService = new ApiService();
+const notificationService = new NotificationService();
 const gallery = new SimpleLightbox('.gallery a');
 
 function renderGalleryOnSearchForm(imgs) {
@@ -31,7 +32,7 @@ async function onSearchForm(event) {
   try {
     const { hits, totalHits } = await imagesApiService.fetchImages();
     renderGalleryOnSearchForm(hits);
-    notiflixService(totalHits);
+    notificationService.notify(totalHits);
   } catch (error) {
     onFetchError(error);
   }
@@ -44,7 +45,7 @@ async function onButtonLoadMore(event) {
   try {
     const { hits, totalHits } = await imagesApiService.fetchImages();
     renderGalleryOnButtonLoadMore(hits);
-    notiflixService(totalHits, page);
+    notificationService.notify(totalHits, page);
   } catch (error) {
     onFetchError(error);
   }
@@ -87,4 +88,4 @@ function scrollGalleryOnClick() {
 
 searchForm.addEventListener('submit', onSearchForm);
 buttonLoadMore.addEventListener('click', onButtonLoadMore);
-galleryContainer.addEventListener('wheel', debounce(scrollGalleryOnWheel, 200));
+galleryContainer.addEventListener('wheel', debounce(scrollGalleryOnWheel, 150));
