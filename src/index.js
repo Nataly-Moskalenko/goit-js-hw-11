@@ -42,7 +42,7 @@ async function onSearchForm(event) {
 async function onButtonLoadMore(event) {
   event.preventDefault();  
   try {
-    page = imagesApiService.getPage();
+    let page = imagesApiService.getPage();
     const { hits, totalHits } = await imagesApiService.fetchImages();
     renderGalleryOnButtonLoadMore(hits);
     notificationService.notify(totalHits, page);
