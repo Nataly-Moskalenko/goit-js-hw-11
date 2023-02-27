@@ -27,7 +27,7 @@ export default class ApiService {
     this.page = 1;
   }
 
-  get numberPage() {
+  getPage() {
     return this.page;
   }
 
