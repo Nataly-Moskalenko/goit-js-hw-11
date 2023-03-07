@@ -26,9 +26,19 @@ function renderGalleryOnButtonLoadMore(imgs) {
 
 async function onSearchForm(event) {
   event.preventDefault();
+
   imagesApiService.searchQuery =
     event.currentTarget.elements.searchQuery.value.trim();
+
+  if (imagesApiService.searchQuery === '') {
+    notificationService.infoSearch();
+    galleryContainer.innerHTML = '';
+    buttonLoadMore.classList.add('hidden');
+    return;
+  }
+
   imagesApiService.resetPage();
+
   try {
     const { hits, totalHits } = await imagesApiService.fetchImages();
     renderGalleryOnSearchForm(hits);
@@ -36,11 +46,13 @@ async function onSearchForm(event) {
   } catch (error) {
     onFetchError(error);
   }
+
   gallery.refresh();
 }
 
 async function onButtonLoadMore(event) {
-  event.preventDefault();  
+  event.preventDefault();
+
   try {
     let page = imagesApiService.getPage();
     const { hits, totalHits } = await imagesApiService.fetchImages();
@@ -49,6 +61,7 @@ async function onButtonLoadMore(event) {
   } catch (error) {
     onFetchError(error);
   }
+
   gallery.refresh();
   scrollGalleryOnClick();
 }

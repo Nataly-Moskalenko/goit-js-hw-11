@@ -8,9 +8,15 @@ export default class NotificationService {
     Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
   }
 
-  info() {
+  infoEnd() {
     Notiflix.Notify.info(
       "We're sorry, but you've reached the end of search results."
+    );
+  }
+
+  infoSearch() {
+    Notiflix.Notify.info(
+      "Please, enter your search query."
     );
   }
 
@@ -35,7 +41,7 @@ export default class NotificationService {
       this.success(totalHits);
       buttonLoadMore.classList.remove('hidden');
     } else if (page > 1 && page >= Math.ceil(totalHits / perPage)) {
-      this.info();
+      this.infoEnd();
       buttonLoadMore.classList.add('hidden');
     }
   }
