@@ -15,9 +15,7 @@ export default class NotificationService {
   }
 
   infoSearch() {
-    Notiflix.Notify.info(
-      "Please, enter your search query."
-    );
+    Notiflix.Notify.info('Please, enter your search query.');
   }
 
   failure() {

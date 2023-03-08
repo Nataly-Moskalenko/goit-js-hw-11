@@ -14,19 +14,25 @@ const imagesApiService = new ApiService();
 const notificationService = new NotificationService();
 const gallery = new SimpleLightbox('.gallery a');
 
+const intersectionObserver = new IntersectionObserver(entries => {
+  if (entries[0].intersectionRatio <= 0) return;
+  refreshGalleryOnScroll();
+});
+
+intersectionObserver.observe(buttonLoadMore);
+
 function renderGalleryOnSearchForm(imgs) {
   const markup = galleryMarkup(imgs);
   galleryContainer.innerHTML = markup;
 }
 
-function renderGalleryOnButtonLoadMore(imgs) {
+function renderGalleryOnScroll(imgs) {
   const markup = galleryMarkup(imgs);
   galleryContainer.insertAdjacentHTML('beforeend', markup);
 }
 
 async function onSearchForm(event) {
   event.preventDefault();
-
   imagesApiService.searchQuery =
     event.currentTarget.elements.searchQuery.value.trim();
 
@@ -36,7 +42,6 @@ async function onSearchForm(event) {
     buttonLoadMore.classList.add('hidden');
     return;
   }
-
   imagesApiService.resetPage();
 
   try {
@@ -46,24 +51,19 @@ async function onSearchForm(event) {
   } catch (error) {
     onFetchError(error);
   }
-
   gallery.refresh();
 }
 
-async function onButtonLoadMore(event) {
-  event.preventDefault();
-
+async function refreshGalleryOnScroll() {
   try {
     let page = imagesApiService.getPage();
     const { hits, totalHits } = await imagesApiService.fetchImages();
-    renderGalleryOnButtonLoadMore(hits);
+    renderGalleryOnScroll(hits);
     notificationService.notify(totalHits, page);
   } catch (error) {
     onFetchError(error);
   }
-
   gallery.refresh();
-  scrollGalleryOnClick();
 }
 
 function onFetchError(error) {
@@ -89,16 +89,5 @@ function scrollGalleryOnWheel(event) {
   return scrollDirection;
 }
 
-function scrollGalleryOnClick() {
-  const { height: cardHeight } = document
-    .querySelector('.gallery')
-    .firstElementChild.getBoundingClientRect();
-  return window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
-}
-
 searchForm.addEventListener('submit', onSearchForm);
-buttonLoadMore.addEventListener('click', onButtonLoadMore);
 galleryContainer.addEventListener('wheel', debounce(scrollGalleryOnWheel, 150));

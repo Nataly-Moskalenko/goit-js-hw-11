@@ -93,7 +93,10 @@ img {
 }
 
 .load-more {
-  display: block;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
   margin: 24px auto;
   padding: 8px 16px;
   background-color: rgb(12, 12, 140);
@@ -106,4 +109,25 @@ img {
 
 .hidden {
   display: none;
+}
+
+.load-more__span {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 3px dotted white;
+  animation-name: spin;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
