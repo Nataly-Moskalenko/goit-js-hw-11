@@ -24,8 +24,8 @@ img {
   --animation-duration: 250ms;
 }
 
-.search-form { 
-  background-color: rgb(12, 12, 140);
+.search-form {
+  background-color: rgb(84, 84, 233); 
   padding-top: 16px;
   padding-bottom: 16px;
   display: flex;
@@ -45,7 +45,7 @@ img {
   width: 280px;
 }
 
-.button {
+.button-search {
   cursor: pointer;
   padding: 12px;
   border-top-right-radius: 4px;
@@ -62,7 +62,7 @@ img {
   justify-content: center;
   padding: 0;
   list-style: none;
-  margin: 24px auto;  
+  margin: 24px auto;
 }
 
 .gallery__item {
@@ -96,7 +96,7 @@ img {
   display: block;
   margin: 24px auto;
   padding: 8px 16px;
-  background-color: rgb(12, 12, 140);
+  background-color: rgb(84, 84, 233); 
   color: white;
   text-transform: uppercase;
   cursor: pointer;
@@ -106,4 +106,28 @@ img {
 
 .hidden {
   display: none;
+}
+
+.button-up {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  border-style: none;
+  border: none;
+  outline: none;
+  color: white;
+  display: block;
+  background-color: rgb(84, 84, 233);  
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  transition: background-color 0.3s, opacity 0.5s, visibility 0.5s;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1000;
+}
+
+.button-up.show {
+  opacity: 0.7;
+  visibility: visible;
 }

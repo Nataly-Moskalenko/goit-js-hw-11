@@ -9,6 +9,7 @@ import NotificationService from './notification-service';
 const searchForm = document.querySelector('#search-form');
 const galleryContainer = document.querySelector('.gallery');
 const buttonLoadMore = document.querySelector('.load-more');
+const mybutton = document.querySelector('.button-up');
 
 const imagesApiService = new ApiService();
 const notificationService = new NotificationService();
@@ -51,7 +52,7 @@ async function onSearchForm(event) {
 }
 
 async function onButtonLoadMore(event) {
-  event.preventDefault();
+  event.preventDefault(); 
 
   try {
     let page = imagesApiService.getPage();
@@ -64,6 +65,7 @@ async function onButtonLoadMore(event) {
 
   gallery.refresh();
   scrollGalleryOnClick();
+  
 }
 
 function onFetchError(error) {
@@ -99,6 +101,28 @@ function scrollGalleryOnClick() {
   });
 }
 
+window.onscroll = function () {
+  scrollFunction();
+};
+
+function scrollFunction() {
+  if (
+    document.body.scrollTop > 1000 ||
+    document.documentElement.scrollTop > 1000
+  ) {    
+    mybutton.classList.add('show');
+  } else {    
+    mybutton.classList.remove('show');
+  }
+}
+
+function topFunction(e) {
+  e.preventDefault();
+  document.body.scrollTop = 0; 
+  document.documentElement.scrollTop = 0;  
+}
+
 searchForm.addEventListener('submit', onSearchForm);
 buttonLoadMore.addEventListener('click', onButtonLoadMore);
 galleryContainer.addEventListener('wheel', debounce(scrollGalleryOnWheel, 150));
+mybutton.addEventListener('click', topFunction);
