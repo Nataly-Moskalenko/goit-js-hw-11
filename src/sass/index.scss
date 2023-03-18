@@ -25,11 +25,16 @@ img {
 }
 
 .search-form {
+  position: fixed;
+  width: 100%;
+  z-index: 7;
+  top: 0;    
   background-color: rgb(84, 84, 233); 
   padding-top: 16px;
   padding-bottom: 16px;
   display: flex;
   justify-content: center;
+  
 }
 
 .form-input:focus-visible,
@@ -62,7 +67,7 @@ img {
   justify-content: center;
   padding: 0;
   list-style: none;
-  margin: 24px auto;
+  margin: 86px auto 24px;
 }
 
 .gallery__item {
