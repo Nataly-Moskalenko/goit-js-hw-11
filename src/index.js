@@ -15,6 +15,8 @@ const imagesApiService = new ApiService();
 const notificationService = new NotificationService();
 const gallery = new SimpleLightbox('.gallery a');
 
+let query = '';
+
 function renderGalleryOnSearchForm(imgs) {
   const markup = galleryMarkup(imgs);
   galleryContainer.innerHTML = markup;
@@ -38,6 +40,12 @@ async function onSearchForm(event) {
     return;
   }
 
+  if (imagesApiService.searchQuery === query) {
+    notificationService.infoQuery();
+    return;
+  }
+
+  query = event.currentTarget.elements.searchQuery.value.trim();
   imagesApiService.resetPage();
 
   try {
@@ -52,7 +60,7 @@ async function onSearchForm(event) {
 }
 
 async function onButtonLoadMore(event) {
-  event.preventDefault(); 
+  event.preventDefault();
 
   try {
     let page = imagesApiService.getPage();
@@ -65,7 +73,6 @@ async function onButtonLoadMore(event) {
 
   gallery.refresh();
   scrollGalleryOnClick();
-  
 }
 
 function onFetchError(error) {
@@ -109,17 +116,17 @@ function scrollFunction() {
   if (
     document.body.scrollTop > 1000 ||
     document.documentElement.scrollTop > 1000
-  ) {    
+  ) {
     mybutton.classList.add('show');
-  } else {    
+  } else {
     mybutton.classList.remove('show');
   }
 }
 
 function topFunction(e) {
   e.preventDefault();
-  document.body.scrollTop = 0; 
-  document.documentElement.scrollTop = 0;  
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
 }
 
 searchForm.addEventListener('submit', onSearchForm);

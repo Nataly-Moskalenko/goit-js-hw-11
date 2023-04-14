@@ -15,9 +15,11 @@ export default class NotificationService {
   }
 
   infoSearch() {
-    Notiflix.Notify.info(
-      "Please, enter your search query."
-    );
+    Notiflix.Notify.info('Please, enter your search query.');
+  }
+
+  infoQuery() {
+    Notiflix.Notify.info('We already found images for this search query.');
   }
 
   failure() {
